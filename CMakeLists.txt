@@ -70,17 +70,17 @@ set (UISRCS
 #
 # libfftw3 setup
 #
-find_path (fftw3f_INCLUDES fftw3.f)
-find_library (fftw3f NAMES fftw3f fftw3f-3)
+find_path (fftw3f_INCLUDES fftw3.f HINTS ${FFTW3_ROOT_DIR})
+find_library (fftw3f NAMES fftw3f fftw3f-3 HINTS ${FFTW3_ROOT_DIR})
 include_directories (${fftw3f_INCLUDES})
 
 #
 # libhamlib setup
 #
-find_path (hamlib_INCLUDES hamlib/rig.h)
-find_library (hamlib NAMES hamlib hamlib-2)
-find_library (usb NAMES usb0)
-find_path (hamlib-runtime-path libhamlib-2.dll)
+find_path (hamlib_INCLUDES hamlib/rig.h HINTS ${HAMLIB_ROOT_DIR}/include)
+find_library (hamlib NAMES hamlib hamlib-2 HINTS ${HAMLIB_ROOT_DIR}/bin)
+find_library (usb NAMES usb0 HINTS ${HAMLIB_ROOT_DIR}/bin)
+find_path (hamlib-runtime-path libhamlib-2.dll HINTS ${HAMLIB_ROOT_DIR}/bin)
 file (GLOB hamlib-backends ${hamlib-runtime-path}/hamlib*.dll)
 include_directories (${hamlib_INCLUDES})
 
