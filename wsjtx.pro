@@ -89,14 +89,15 @@ LIBS += -lfftw3f `$$F90 -print-file-name=libgfortran.so`
 }
 
 win32 {
-INCLUDEPATH += ../../hamlib-1.2.15.3/include
-LIBS += ../../hamlib-1.2.15.3/src/.libs/libhamlib.dll.a
-#LIBS += ../../hamlib-1.2.15.3/lib/gcc/libhamlib.dll.a
-LIBS += ../wsjtx/lib/libjt9.a
-LIBS += ../wsjtx/libfftw3f_win.a
-LIBS += ../wsjtx/libpskreporter.a
-LIBS += ../wsjtx/libHRDInterface001.a
-LIBS += libwsock32
-LIBS += C:/MinGW/lib/libf95.a
+  INCLUDEPATH += $$quote(../hamlib/include)
+  LIBS += -L$$quote(../hamlib/lib/gcc) -lhamlib
+
+  LIBS += ../wsjtx-build/lib/libjt9impl.a
+  LIBS += ../wsjtx/libHRDInterface001.a
+  LIBS += -lgfortran
+  LIBS += ../wsjtx/libfftw3f_win.a
+
+#LIBS += ../wsjtx/libpskreporter.a
+#LIBS += libwsock32
 
 }
