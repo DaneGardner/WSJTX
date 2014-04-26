@@ -1473,7 +1473,7 @@ void MainWindow::readFromStdout()                             //readFromStdout
       }
 
       // find and extract any report for myCall
-      bool stdMsg = decodedtext.report(m_myCall,/*mod*/m_rptRcvd);
+      bool stdMsg = decodedtext.report(baseCall(m_myCall),/*mod*/m_rptRcvd);
 
       // extract details and send to PSKreporter
       int nsec=QDateTime::currentMSecsSinceEpoch()/1000-m_secBandChanged;
@@ -1626,8 +1626,11 @@ void MainWindow::guiUpdate()
 //    ba2msg(ba,msgsent);
     int len1=22;
     int ichk=0,itext=0;
-    if(m_modeTx=="JT9") genjt9_(message,&ichk,msgsent,itone,&itext,len1,len1);
-    if(m_modeTx=="JT65") gen65_(message,&ichk,msgsent,itone,&itext,len1,len1);
+    if(m_modeTx=="JT9") {
+        genjt9_(message,&ichk,msgsent,itone,&itext,len1,len1);
+    } else if(m_modeTx=="JT65") {
+        gen65_(message,&ichk,msgsent,itone,&itext,len1,len1);
+    }
     msgsent[22]=0;
     QString t=QString::fromLatin1(msgsent);
     if(m_tune) t="TUNE";
@@ -2030,7 +2033,7 @@ void MainWindow::doubleClickOnCall(bool shift, bool ctrl)
   genStdMsgs(rpt);
 
   // determine the appropriate response to the received msg
-  if(decodedtext.indexOf(m_myCall)>=0)
+  if(decodedtext.indexOf(baseCall(m_myCall))>=0)
   {
     if (t4.length()>=7   // enough fields for a normal msg
         and !gridOK(t4.at(7))) // but no grid on end of msg
@@ -2098,64 +2101,97 @@ void MainWindow::doubleClickOnCall(bool shift, bool ctrl)
 
 void MainWindow::genStdMsgs(QString rpt)                       //genStdMsgs()
 {
-  QString t;
-  QString hisCall=ui->dxCallEntry->text().toUpper().trimmed();
-  ui->dxCallEntry->setText(hisCall);
-  if(hisCall=="") {
-    ui->labAz->setText("");
-    ui->labDist->setText("");
     ui->tx1->setText("");
     ui->tx2->setText("");
     ui->tx3->setText("");
     ui->tx4->setText("");
     ui->tx5->setText("");
     ui->tx6->setText("");
-    if(m_myCall!="" and m_myGrid!="") {
-      t="CQ " + m_myCall + " " + m_myGrid.mid(0,4);
-      msgtype(t, ui->tx6);
-    }
+
+    ui->labAz->setText("");
+    ui->labDist->setText("");
     ui->genMsg->setText("");
     ui->freeTextMsg->setText("");
-    return;
-  }
-  QString hisBase=baseCall(hisCall);
-  QString myBase=baseCall(m_myCall);
-  QString t0=hisBase + " " + myBase + " ";
-  t=t0 + m_myGrid.mid(0,4);
-  if(myBase!=m_myCall) t="DE " + m_myCall + " " + m_myGrid.mid(0,4);
-  msgtype(t, ui->tx1);
-  if(rpt == "") {
-    t=t+" OOO";
-    msgtype(t, ui->tx2);
-    msgtype("RO", ui->tx3);
-    msgtype("RRR", ui->tx4);
-    msgtype("73", ui->tx5);
-  } else {
-    t=t0 + rpt;
-    msgtype(t, ui->tx2);
-    t=t0 + "R" + rpt;
-    msgtype(t, ui->tx3);
-    t=t0 + "RRR";
-    msgtype(t, ui->tx4);
-    t=t0 + "73";
-    if(myBase!=m_myCall) t="DE " + m_myCall + " 73";
-    msgtype(t, ui->tx5);
-  }
 
-  t="CQ " + m_myCall + " " + m_myGrid.mid(0,4);
-  msgtype(t, ui->tx6);
-  m_ntx=1;
-  ui->txrb1->setChecked(true);
-  m_rpt=rpt;
+    if(m_myCall.isEmpty()) {
+        return;
+    }
+
+    QString myBase = baseCall(m_myCall);
+    bool myCallHasSuffix = (myBase != m_myCall);
+
+    QString tx6;
+    if(!myCallHasSuffix) {
+        tx6 = QString("CQ %1 %2").arg(myBase).arg(m_myGrid.mid(0,4));
+    } else {
+        tx6 = QString("CQ %1").arg(m_myCall);
+    }
+    msgtype(tx6, ui->tx6);
+
+
+    QString hisCall = ui->dxCallEntry->text().toUpper().trimmed();
+    ui->dxCallEntry->setText(hisCall);
+
+    if(hisCall.isEmpty()) {
+        return;
+    }
+
+    QString hisBase = baseCall(hisCall);
+
+    if(hisBase.isEmpty()) {
+        return;
+    }
+
+
+    QString tx1;
+    if(!myCallHasSuffix) {
+        tx1 = QString("%1 %2 %3").arg(hisBase).arg(myBase).arg(m_myGrid.mid(0,4));
+    } else {
+        tx1 = QString("%1 %2").arg(hisBase).arg(m_myCall);
+    }
+
+    QString tx2;
+    if(rpt.isEmpty()) {
+        tx2 = QString("%1 %2 OOO").arg(hisBase).arg(myBase);
+    } else {
+        tx2 = QString("%1 %2 %3").arg(hisBase).arg(myBase).arg(rpt);
+    }
+
+    QString tx3;
+    if(rpt.isEmpty()) {
+        tx3 = QString("%1 %2 RO").arg(hisBase).arg(myBase);
+    } else {
+        tx3 = QString("%1 %2 R%3").arg(hisBase).arg(myBase).arg(rpt);
+    }
+
+    QString tx4 = QString("%1 %2 RRR").arg(hisBase).arg(myBase);
+
+    QString tx5 = QString("%1 %2 73").arg(hisBase).arg(myBase);
+
+    msgtype(tx1, ui->tx1);
+    msgtype(tx2, ui->tx2);
+    msgtype(tx3, ui->tx3);
+    msgtype(tx4, ui->tx4);
+    msgtype(tx5, ui->tx5);
+
+
+    m_ntx=1;
+    ui->txrb1->setChecked(true);
+    m_rpt=rpt;
 }
 
-QString MainWindow::baseCall(QString t)
+QString MainWindow::baseCall(QString fullCall)
 {
-  int n1=t.indexOf("/");
-  if(n1<0) return t;
-  int n2=t.length()-n1-1;
-  if(n2>=n1) return t.mid(n1+1);
-  return t.mid(0,n1);
+    int indexStroke = fullCall.indexOf('/');
+    if(indexStroke < 0) {
+        return fullCall;
+    }
+
+    if(indexStroke >= (fullCall.count()-2)) {
+        return fullCall.left(indexStroke);
+    }
+
+    return fullCall.mid(indexStroke+1,-1);
 }
 
 void MainWindow::lookup()                                       //lookup()
@@ -2288,37 +2324,43 @@ void MainWindow::on_addButton_clicked()                       //Add button
   }
 }
 
-void MainWindow::msgtype(QString t, QLineEdit* tx)               //msgtype()
+void MainWindow::msgtype(QString messageDesired, QLineEdit* textBox)               //msgtype()
 {
-  char message[23];
-  char msgsent[23];
-  int len1=22;
+    char message[23];
+    char msgsent[23];
+    int len1=22;
 
-  t=t.toUpper();
-  QByteArray s=t.toUpper().toLocal8Bit();
-  ba2msg(s,message);
-  int ichk=1,itext=0;
-  genjt9_(message,&ichk,msgsent,itone,&itext,len1,len1);
-  msgsent[22]=0;
-  bool text=false;
-  if(itext!=0) text=true;
-  QString t1;
-  t1.fromLatin1(msgsent);
-  if(text) t1=t1.mid(0,13);
-  QPalette p(tx->palette());
-  if(text) {
-    p.setColor(QPalette::Base,"#ffccff");
-  } else {
-    p.setColor(QPalette::Base,Qt::white);
-  }
-  tx->setPalette(p);
-  int len=t.length();
-  if(text) {
-    len=qMin(len,13);
-    tx->setText(t.mid(0,len).toUpper());
-  } else {
-    tx->setText(t);
-  }
+    messageDesired = messageDesired.trimmed().toUpper();
+    QByteArray s = messageDesired.toLocal8Bit();
+    ba2msg(s,message);
+    int ichk=1,itext=0;
+    genjt9_(message,&ichk,msgsent,itone,&itext,len1,len1);
+    msgsent[22]=0;
+
+
+    QString messageActual = QString::fromLocal8Bit(msgsent).trimmed();
+    bool text = (itext!=0);
+    if(text) {
+        messageActual = messageActual.mid(0,13);
+    }
+
+    if(!messageDesired.isEmpty()) {
+        QPalette p(textBox->palette());
+        if(text) {
+            p.setColor(QPalette::Base, QColor(Qt::yellow).lighter());
+        } else {
+            p.setColor(QPalette::Base, Qt::white);
+        }
+        if(messageActual.compare(messageDesired)) {
+            p.setColor(QPalette::Base, QColor(Qt::red).lighter(170));
+            textBox->setToolTip(QString("Desired message: \"%1\"").arg(messageDesired));
+        } else {
+            textBox->setToolTip(QString());
+        }
+    }
+
+    textBox->setPalette(p);
+    textBox->setText(messageActual);
 }
 
 void MainWindow::on_tx1_editingFinished()                       //tx1 edited

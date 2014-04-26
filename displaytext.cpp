@@ -108,14 +108,19 @@ void DisplayText::_appendDXCCWorkedB4(/*mod*/DecodedText& t1, QString& bg, /*use
 void DisplayText::displayDecodedText(DecodedText decodedText, QString myCall, bool displayDXCCEntity, LogBook logBook)
 {
     QString bg="white";
+
     bool CQcall = false;
-    if (decodedText.indexOf(" CQ ") > 0)
-    {
+    if (decodedText.indexOf(" CQ ") > 0) {
         CQcall = true;
         bg="#66ff66";  //green
     }
-    if (myCall != "" and decodedText.indexOf(" " + myCall + " ") > 0)
+
+    if (!myCall.isEmpty() &&
+            ( (decodedText.indexOf(" " + myCall + " ") > 0) ||
+              (decodedText.indexOf(" " + baseCall(myCall) + " ") > 0) )
+            ) {
         bg="#ff6666"; //red
+    }
 
     // if enabled add the DXCC entity and B4 status to the end of the preformated text line t1
     if (displayDXCCEntity && CQcall)
@@ -136,4 +141,19 @@ void DisplayText::displayTransmittedText(QString text, QString modeTx, qint32 tx
         "  Tx      " + t2 + t1 + text;   // The position of the 'Tx' is searched for in DecodedText and in MainWindow.  Not sure if thats required anymore? VK3ACF
 
     _insertText(t,bg);
+}
+
+
+QString DisplayText::baseCall(QString fullCall)
+{
+    int indexStroke = fullCall.indexOf('/');
+    if(indexStroke < 0) {
+        return fullCall;
+    }
+
+    if(indexStroke >= (fullCall.count()-2)) {
+        return fullCall.left(indexStroke);
+    }
+
+    return fullCall.mid(indexStroke+1,-1);
 }
