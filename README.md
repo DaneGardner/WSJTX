@@ -4,7 +4,10 @@ This is a fork of the original project, as they are doing a lot of work to it ri
 
 
 ## Changes
-* Support proper use of prefix and suffix in generation of standard messages
+* Displays exact messages being transmitted, instead of surprising users with changes at transmit time
+  * differences are highlighted using red background color, and a tooltip displaying the original desired message
+* Fixed the highlighting of "free text" messages
+* Support proper use of prefix and suffix in standard message generation
   * as per Joe Taylor (K1JT) in his paper on JT65 (I don't know why the project deviated from his specs)
 * Support proper identification of user's callsign and base callsign
   * if you had a suffix in your callsign, and someone properly responded using your base callsign, the software ignored it entirely
