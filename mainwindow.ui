@@ -36,6 +36,21 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <layout class="QGridLayout" name="gridLayout">
       <property name="horizontalSpacing">
@@ -526,6 +541,15 @@ p, li { white-space: pre-wrap; }
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout_3">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
       <item row="3" column="3">
        <widget class="QLabel" name="labAz">
         <property name="sizePolicy">
@@ -1296,7 +1320,7 @@ p, li { white-space: pre-wrap; }
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <property name="spacing">
-              <number>6</number>
+              <number>0</number>
              </property>
              <property name="leftMargin">
               <number>4</number>
@@ -2394,7 +2418,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string> About WSJT-X</string>
+    <string>About WSJT-X</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+F1</string>
