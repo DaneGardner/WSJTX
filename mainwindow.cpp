@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QColorDialog>
 
+#include "utilities.h"
 #include "soundout.h"
 #include "devsetup.h"
 #include "plotter.h"
@@ -2178,20 +2179,6 @@ void MainWindow::genStdMsgs(QString rpt)                       //genStdMsgs()
     m_ntx=1;
     ui->txrb1->setChecked(true);
     m_rpt=rpt;
-}
-
-QString MainWindow::baseCall(QString fullCall)
-{
-    int indexStroke = fullCall.indexOf('/');
-    if(indexStroke < 0) {
-        return fullCall;
-    }
-
-    if(indexStroke >= (fullCall.count()-2)) {
-        return fullCall.left(indexStroke);
-    }
-
-    return fullCall.mid(indexStroke+1,-1);
 }
 
 void MainWindow::lookup()                                       //lookup()

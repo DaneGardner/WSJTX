@@ -33,9 +33,6 @@ private:
     int _maxDisplayedCharacters;
     void _insertText(const QString text, const QString bg);
     void _appendDXCCWorkedB4(/*mod*/DecodedText& t1, QString &bg, LogBook logBook);
-
-    QString baseCall(QString fullCall);
-
 };
 
 #endif // DISPLAYTEXT_H

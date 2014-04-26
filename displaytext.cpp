@@ -3,6 +3,8 @@
 #include <QMouseEvent>
 #include <QDateTime>
 
+#include "utilities.h"
+
 DisplayText::DisplayText(QWidget *parent) :
     QTextBrowser(parent)
 {
@@ -141,19 +143,4 @@ void DisplayText::displayTransmittedText(QString text, QString modeTx, qint32 tx
         "  Tx      " + t2 + t1 + text;   // The position of the 'Tx' is searched for in DecodedText and in MainWindow.  Not sure if thats required anymore? VK3ACF
 
     _insertText(t,bg);
-}
-
-
-QString DisplayText::baseCall(QString fullCall)
-{
-    int indexStroke = fullCall.indexOf('/');
-    if(indexStroke < 0) {
-        return fullCall;
-    }
-
-    if(indexStroke >= (fullCall.count()-2)) {
-        return fullCall.left(indexStroke);
-    }
-
-    return fullCall.mid(indexStroke+1,-1);
 }

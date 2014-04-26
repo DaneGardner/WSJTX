@@ -59,7 +59,8 @@ SOURCES += \
 	about.cpp \
 	mainwindow.cpp \
 	main.cpp \
-    decodedtext.cpp
+    decodedtext.cpp \
+    utilities.cpp
 
 win32 {
 SOURCES += killbyname.cpp
@@ -74,7 +75,8 @@ HEADERS  += mainwindow.h plotter.h soundin.h soundout.h \
     logbook/logbook.h \
     logbook/countrydat.h \
     logbook/countriesworked.h \
-    logbook/adif.h
+    logbook/adif.h \
+    utilities.h
 
 
 FORMS    += mainwindow.ui about.ui devsetup.ui widegraph.ui \
