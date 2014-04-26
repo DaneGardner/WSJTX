@@ -35,9 +35,7 @@ QTextEdit* pShortcuts;
 QTextEdit* pPrefixes;
 QTcpSocket* commanderSocket = new QTcpSocket(0);
 
-QString rev="$Rev$";
-QString Program_Title_Version="  WSJT-X   v1.3, r" + rev.mid(6,4) +
-                              "    by K1JT";
+QString Program_Title_Version="WSJT-X v1.3+ by K1JT; build by W7DLG";
 
 //-------------------------------------------------- MainWindow constructor
 // Multiple instances: new arg *thekey
@@ -422,7 +420,7 @@ MainWindow::MainWindow(QSettings * settings, QSharedMemory *shdmem, QString *the
   ui->decodedTextLabel->setText(t);
   ui->decodedTextLabel2->setText(t);
 
-  psk_Reporter->setLocalStation(m_myCall,m_myGrid, m_antDescription[m_band], "WSJT-X r" + rev.mid(6,4) );
+  psk_Reporter->setLocalStation(m_myCall,m_myGrid, m_antDescription[m_band], "WSJT-X v1.3+");
 
   on_actionEnable_DXCC_entity_triggered(m_displayDXCCEntity);  // sets text window proportions and (re)inits the logbook
 
@@ -849,7 +847,7 @@ void MainWindow::on_actionDeviceSetup_triggered()               //Setup Dialog
     m_pskReporter=dlg.m_pskReporter;
 
     if(m_pskReporter) {
-      psk_Reporter->setLocalStation(m_myCall, m_myGrid, m_antDescription[m_band], "WSJT-X r" + rev.mid(6,4) );
+      psk_Reporter->setLocalStation(m_myCall, m_myGrid, m_antDescription[m_band], "WSJT-X v1.3+");
     }
 
     m_After73=dlg.m_After73;
@@ -1492,7 +1490,7 @@ void MainWindow::readFromStdout()                             //readFromStdout
           int snr = decodedtext.snr();
           uint frequency = 1000000.0*m_dialFreq + audioFrequency + 0.5;
 
-          psk_Reporter->setLocalStation(m_myCall, m_myGrid, m_antDescription[m_band], "WSJT-X r" + rev.mid(6,4) );
+          psk_Reporter->setLocalStation(m_myCall, m_myGrid, m_antDescription[m_band], "WSJT-X v1.3+");
           if(gridOK(grid))
               psk_Reporter->addRemoteStation(deCall,grid,QString::number(frequency),msgmode,QString::number(snr),
                                              QString::number(QDateTime::currentDateTime().toTime_t()));
@@ -2703,7 +2701,7 @@ void MainWindow::on_bandComboBox_activated(int index)
   out << QDateTime::currentDateTimeUtc().toString("yyyy-MMM-dd hh:mm")
       << "  " << m_dialFreq << " MHz  " << m_mode << endl;
   f2.close();
-  psk_Reporter->setLocalStation(m_myCall, m_myGrid, m_antDescription[m_band], "WSJT-X r" + rev.mid(6,4) );
+  psk_Reporter->setLocalStation(m_myCall, m_myGrid, m_antDescription[m_band], "WSJT-X v1.3+");
 }
 
 void MainWindow::on_actionPrompt_to_log_QSO_triggered(bool checked)
