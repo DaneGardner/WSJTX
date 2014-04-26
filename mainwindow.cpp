@@ -2357,9 +2357,9 @@ void MainWindow::msgtype(QString messageDesired, QLineEdit* textBox)            
         } else {
             textBox->setToolTip(QString());
         }
+        textBox->setPalette(p);
     }
 
-    textBox->setPalette(p);
     textBox->setText(messageActual);
 }
 
