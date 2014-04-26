@@ -44,6 +44,7 @@ set (CXXSRCS
   plotter.cpp
   widegraph.cpp
   devsetup.cpp
+  utilities.cpp
   about.cpp
   mainwindow.cpp
   main.cpp
@@ -171,9 +172,19 @@ install (
 )
 
 install (
-  FILES WSJT-X_Users_Guide_v${WSJTX_VERSION_MAJOR}.${WSJTX_VERSION_MINOR}.docx
+  FILES cty.dat kvasd.dat
   DESTINATION bin
   )
+
+  install (
+  FILES CALL3.TXT mouse_commands.txt prefixes.txt shortcuts.txt
+  DESTINATION bin
+  )
+
+#install (
+#  FILES WSJT-X_Users_Guide_v${WSJTX_VERSION_MAJOR}.${WSJTX_VERSION_MINOR}.docx
+#  DESTINATION bin
+#  )
 
 if (WIN32)
   install (
