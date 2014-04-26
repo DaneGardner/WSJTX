@@ -2121,7 +2121,7 @@ void MainWindow::genStdMsgs(QString rpt)                       //genStdMsgs()
     bool myCallHasSuffix = (myBase != m_myCall);
 
     QString tx6;
-    if(!myCallHasSuffix) {
+    if(!myCallHasSuffix && !m_myGrid.isEmpty()) {
         tx6 = QString("CQ %1 %2").arg(myBase).arg(m_myGrid.mid(0,4));
     } else {
         tx6 = QString("CQ %1").arg(m_myCall);
@@ -2144,7 +2144,7 @@ void MainWindow::genStdMsgs(QString rpt)                       //genStdMsgs()
 
 
     QString tx1;
-    if(!myCallHasSuffix) {
+    if(!myCallHasSuffix && !m_myGrid.isEmpty()) {
         tx1 = QString("%1 %2 %3").arg(hisBase).arg(myBase).arg(m_myGrid.mid(0,4));
     } else {
         tx1 = QString("%1 %2").arg(hisBase).arg(m_myCall);
