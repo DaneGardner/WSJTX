@@ -1403,6 +1403,7 @@ void MainWindow::decode()                                       //decode()
 
 void MainWindow::jt9_error(QProcess::ProcessError e)                                     //jt9_error
 {
+    Q_UNUSED(e)
   if(!m_killAll) {
     msgBox("Error starting or running\n" + m_appDir + "/jt9 -s");
     exit(1);
